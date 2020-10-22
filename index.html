@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+p {
+  text-align: center;
+  font-size: 60px;
+  margin-top: 0px;
+}
+.invisibleTime{
+  color:white;
+}
+</style>
+</head>
+<body>
+
+<p id="demo"></p>
+
+<button id="startCount" onclick="startMe()">Start</button>
+<button id="stopCount" onclick="stopAll()">Stop</button>
+
+<p id="invisible" class="invisibleTime"></p>
+
+
+<script>
+// Set the date we're counting down to
+
+function startMe(){
+
+let remainingMaskTime = new Date(720000000);
+                               
+var now1 = new Date().getTime();
+let remainingMaskTime2 = parseInt(document.cookie);
+
+if (isNaN(remainingMaskTime2)){
+  remainingMaskTime2 = remainingMaskTime.getTime() + now1
+}else{
+
+  remainingMaskTime2 = new Date(remainingMaskTime2).getTime()+now1;
+}
+console.log(remainingMaskTime2);
+
+
+// Update the count down every 1 second
+ var x = setInterval(function() {
+
+//   // Get today's date and time
+   var now = new Date().getTime();
+    
+  // Find the distance between now and the count down date
+ var distance = remainingMaskTime2-now//countDownDate - now;
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+  // Output the result in an element with id="demo"
+  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+  + minutes + "m " + seconds + "s ";
+  document.getElementById("invisible").innerHTML = distance;
+  // If the count down is over, write some text 
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "EXPIRED";
+  }
+}, 1000);
+
+let stopButt = document.getElementById("stopCount");
+stopButt.addEventListener("click",stopCount,false)
+
+function stopCount(){
+  clearInterval(x);
+}
+
+ }
+function stopAll(){
+  
+  let getTime = document.getElementById("invisible").innerHTML;
+
+  document.cookie = getTime;
+
+}
+
+</script>
+
+</body>
+</html>
