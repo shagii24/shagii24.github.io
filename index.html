@@ -3,13 +3,43 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+ body{
+   display: grid;
+   grid-template-columns: repeat(3,1fr);
+   grid-template-rows: repeat(4,1fr);
+   gap: 20px;
+ } 
+
 p {
+  grid-row: 1;
+  grid-column: 2;
+  height: 5vh;
   text-align: center;
-  font-size: 60px;
+  font-size: 3rem;
   margin-top: 0px;
+}
+.controlButtons{
+  cursor: pointer;
+  outline: none;
+  grid-column: 2;
+border-radius: 1cm;
+color:white;
+font-family: Verdana, Geneva, Tahoma, sans-serif;
+font-size: 1rem;
+background-color: #407cee;
+  position: relative;
+  align-items: center;
+  
+}
+#startCount{
+  grid-row: 2;
+}
+#stopCount{
+  grid-row: 3;
 }
 .invisibleTime{
   color:white;
+  grid-row: 4;
 }
 </style>
 </head>
@@ -17,8 +47,8 @@ p {
 
 <p id="demo"></p>
 
-<button id="startCount" onclick="startMe()">Start</button>
-<button id="stopCount" onclick="stopAll()">Stop</button>
+<button class="controlButtons" id="startCount" onclick="startMe()">Start</button>
+<button class="controlButtons" id="stopCount" onclick="stopAll()">Stop</button>
 
 <p id="invisible" class="invisibleTime"></p>
 
