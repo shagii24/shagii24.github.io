@@ -57,7 +57,7 @@ background-color: #407cee;
 // Set the date we're counting down to
 
 function startMe(){
-
+document.getElementById("startCount").disabled  = true;
 let remainingMaskTime = new Date(720000000);
                                
 var now1 = new Date().getTime();
@@ -69,7 +69,7 @@ if (isNaN(remainingMaskTime2)){
 
   remainingMaskTime2 = new Date(remainingMaskTime2).getTime()+now1;
 }
-console.log(remainingMaskTime2);
+
 
 
 // Update the count down every 1 second
@@ -107,7 +107,7 @@ function stopCount(){
 
  }
 function stopAll(){
-  
+  document.getElementById("startCount").disabled  = false;
   let getTime = document.getElementById("invisible").innerHTML;
 
   document.cookie = getTime;
