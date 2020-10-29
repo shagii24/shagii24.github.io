@@ -6,7 +6,7 @@
  body{
    display: grid;
    grid-template-columns: repeat(3,1fr);
-   grid-template-rows: repeat(5,1fr);
+   grid-template-rows: repeat(5,0.5fr);
    gap: 20px;
  } 
 
@@ -53,6 +53,7 @@ background-color: #407cee;
   grid-column: 2;
   display: flex;
   justify-content: space-around;
+  gap:10px;
   flex-direction: column;
   align-items: center;
 }
@@ -73,13 +74,21 @@ background-color: #407cee;
 <button class="controlButtons" id="stopCount" onclick="stopAll()">Stop</button>
 
 <form id="subtractTime" class="formClass">
+<div class="timeDecision">
+  <input type="radio" name="timeCalculation" id="subTime" value="0" checked="checked">
+  <label for="subTime">Subtract Time</label>
+  <input type="radio" name="timeCalculation" id="addTime" value="1">
+  <label for="addTime">Add Time</label>
+</div>
+<label for="fname">Change time from counter</label>
 
-<label for="fname">Subtract time from counter</label>
 <input type="text" name="fname" id="inputedHours" placeholder="hh">
 <input type="text" name="fname" id="inputedMinutes" placeholder="mm">
 <input type="text" name="fname" id="inputedSeconds" placeholder="ss">
 <button class = "controlButtons submitButton" id="submitButton" onclick="updateTime()">Submit</button>
 </form>
+
+<button onclick="resetMe()" class="controlButtons" id="resetMe">Reset Counter</button>
 
 <script>
 
@@ -95,6 +104,7 @@ var now1 = new Date().getTime();//date represented in milliseconds. When page re
 
 let remainingMaskTime2 = parseInt(document.cookie);
 
+console.log(remainingMaskTime2)
 // add form to input new hours if needed. The best would be to do counter in hours that user can set up by either pushing plus or minus button or entering number of hours and minutes
 
 if (isNaN(remainingMaskTime2)){
@@ -114,21 +124,77 @@ if (isNaN(remainingMaskTime2)){
 
 }
 
+
+function resetMe(){
+  document.getElementById("hoursFrame").innerHTML = 200; 
+  document.getElementById("minutesFrame").innerHTML = 00;
+  document.getElementById("secondsFrame").innerHTML = 00;
+}
+
 function updateTime(){
   let newHours =document.getElementById("inputedHours").value;
   let newMinutes =document.getElementById("inputedMinutes").value;
   let newSeconds =document.getElementById("inputedSeconds").value;
 
+
+
   let actualHours =document.getElementById("hoursFrame").innerHTML;
   let actualMinutes =document.getElementById("minutesFrame").innerHTML;
   let actualSeconds =document.getElementById("secondsFrame").innerHTML;
 
-  document.getElementById("hoursFrame").innerHTML = actualHours-newHours; //+ "h "
-  //+ minutes + "m " + seconds + "s ";
+
+let actualHoursInt = parseInt(actualHours);
+let actualMinutesInt = parseInt(actualMinutes);
+let actualSecondsInt = parseInt(actualSeconds);
+if (isNaN(actualHoursInt)){
+  actualHoursInt = 0
+}
+if (isNaN(actualMinutesInt)){
+  actualMinutesInt = 0
+}
+if (isNaN(actualSecondsInt)){
+  actualSecondsInt = 0
+}
+
+
+
+let newHoursInt = parseInt(newHours);
+let newMinutesInt = parseInt(newMinutes);
+let newSecondsInt = parseInt(newSeconds);
+
+
+if (isNaN(newHoursInt)){
+  newHoursInt = 0
+}
+if (isNaN(newMinutesInt)){
+  newMinutesInt = 0
+}
+if (isNaN(newSecondsInt)){
+  newSecondsInt = 0
+}
+
+let radios = document.getElementsByName("timeCalculation");
+let calculationType;
+for(let i = 0,length = radios.length;i<length;i++){
+  if(radios[i].checked){
+    calculationType = radios[i].value
+  }
+}
+if (calculationType === "0"){
+  document.getElementById("hoursFrame").innerHTML = actualHours-newHours; 
   document.getElementById("minutesFrame").innerHTML = actualMinutes-newMinutes;
   document.getElementById("secondsFrame").innerHTML = actualSeconds-newSeconds;
   
-  document.cookie = ((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000);;
+  document.cookie = ((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000);
+
+} else if(calculationType === "1"){
+
+  document.getElementById("hoursFrame").innerHTML = actualHoursInt + newHoursInt; 
+  document.getElementById("minutesFrame").innerHTML = actualMinutesInt + newMinutesInt;
+  document.getElementById("secondsFrame").innerHTML = actualSecondsInt + newSecondsInt;
+
+  document.cookie = ((actualHoursInt + newHoursInt)*1000*60*60)+((actualMinutesInt + newMinutesInt)*1000*60)+((actualSecondsInt + newSecondsInt)*1000);
+}
 }
 
 //after start button click
@@ -138,6 +204,7 @@ function startMe(){
 
 document.getElementById("startCount").disabled  = true;
 document.getElementById("submitButton").disabled  = true;
+document.getElementById("resetMe").disabled  = true;
 
 
 //create reverse engineering from hours/minutes/seconds to milliseconds for calculations
@@ -175,7 +242,9 @@ let remainingMaskTime2 = (calculationHours*1000*60*60)+(calculationMinutes*1000*
   // If the count down is over, write some text 
   if (distance < 0) {
     clearInterval(x);
-    document.getElementById("demo").innerHTML = "EXPIRED";
+    document.getElementById("hoursFrame").innerHTML = 0; 
+    document.getElementById("minutesFrame").innerHTML = 0;
+    document.getElementById("secondsFrame").innerHTML = 0;
   }
 }, 1000);
 
@@ -190,6 +259,7 @@ function stopCount(){
 function stopAll(){
   document.getElementById("startCount").disabled  = false;
   document.getElementById("submitButton").disabled  = false;
+  document.getElementById("resetMe").disabled  = false;
   document.cookie = distance;
 
 }
