@@ -98,7 +98,7 @@ let remainingMaskTime2 = parseInt(document.cookie);
 // add form to input new hours if needed. The best would be to do counter in hours that user can set up by either pushing plus or minus button or entering number of hours and minutes
 
 if (isNaN(remainingMaskTime2)){
-  remainingMaskTime2 = remainingMaskTime.getTime() //create number that will be in the future - time from today + remainingMaskTime - from this time code will subtract milliseconds/seconds/hours/days
+  remainingMaskTime2 = remainingMaskTime //create number that will be in the future - time from today + remainingMaskTime - from this time code will subtract milliseconds/seconds/hours/days
 }else{
   remainingMaskTime2 = new Date(remainingMaskTime2).getTime();
 }
