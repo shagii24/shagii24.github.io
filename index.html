@@ -6,23 +6,28 @@
  body{
    display: grid;
    grid-template-columns: repeat(3,1fr);
-   grid-template-rows: repeat(4,1fr);
+   grid-template-rows: repeat(5,1fr);
    gap: 20px;
  } 
 
-p {
+.showTime {
   grid-row: 1;
   grid-column: 2;
   height: 5vh;
-  text-align: center;
+
   font-size: 3rem;
   margin-top: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
+
 .controlButtons{
   cursor: pointer;
   outline: none;
   grid-column: 2;
-border-radius: 1cm;
+  border-radius: 1cm;
 color:white;
 font-family: Verdana, Geneva, Tahoma, sans-serif;
 font-size: 1rem;
@@ -31,46 +36,122 @@ background-color: #407cee;
   align-items: center;
   
 }
+.submitButton{
+  width: 100%;
+  height: 1fr;
+}
 #startCount{
   grid-row: 2;
 }
 #stopCount{
   grid-row: 3;
 }
-.invisibleTime{
-  color:white;
+.formClass{
+
+  color:black;
   grid-row: 4;
+  grid-column: 2;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
 </head>
-<body>
+<body onload="loadTime()">
 
-<p id="demo"></p>
+<div class = "showTime" id="demo">
+    <div class="timeFrame" id="hoursFrame"></div>
+    <div class="timeFrame">h</div>
+    <div class="timeFrame" id ="minutesFrame"></div>
+    <div class="timeFrame">m</div>
+    <div class="timeFrame" id = "secondsFrame"></div>
+    <div class="timeFrame">s</div>
+</div>
 
 <button class="controlButtons" id="startCount" onclick="startMe()">Start</button>
 <button class="controlButtons" id="stopCount" onclick="stopAll()">Stop</button>
 
-<p id="invisible" class="invisibleTime"></p>
+<form id="subtractTime" class="formClass">
 
+<label for="fname">Subtract time from counter</label>
+<input type="text" name="fname" id="inputedHours" placeholder="hh">
+<input type="text" name="fname" id="inputedMinutes" placeholder="mm">
+<input type="text" name="fname" id="inputedSeconds" placeholder="ss">
+<button class = "controlButtons submitButton" id="submitButton" onclick="updateTime()">Submit</button>
+</form>
 
 <script>
-// Set the date we're counting down to
 
-function startMe(){
-document.getElementById("startCount").disabled  = true;
-let remainingMaskTime = new Date(720000000);
-                               
-var now1 = new Date().getTime();
+let distance // variables outside of any function to collect data that can be used in other functions. 
+
+//downloading data from cookie or data inserted manually by user at load of page
+
+function loadTime(){
+
+let remainingMaskTime = new Date(720000000).getTime(); //this time is in milliseconds which is 1000 of second
+ 
+var now1 = new Date().getTime();//date represented in milliseconds. When page refreshes this value changes in accordance to time that has passed
+
 let remainingMaskTime2 = parseInt(document.cookie);
 
-if (isNaN(remainingMaskTime2)){
-  remainingMaskTime2 = remainingMaskTime.getTime() + now1
-}else{
+// add form to input new hours if needed. The best would be to do counter in hours that user can set up by either pushing plus or minus button or entering number of hours and minutes
 
-  remainingMaskTime2 = new Date(remainingMaskTime2).getTime()+now1;
+if (isNaN(remainingMaskTime2)){
+  remainingMaskTime2 = remainingMaskTime.getTime() //create number that will be in the future - time from today + remainingMaskTime - from this time code will subtract milliseconds/seconds/hours/days
+}else{
+  remainingMaskTime2 = new Date(remainingMaskTime2).getTime();
+}
+  // Time calculations for days, hours, minutes and seconds
+  var hours = Math.floor((remainingMaskTime2 % (1000 * 60 * 60 * 60 * 60)) / (1000 * 60 * 60));
+  var minutes = Math.floor((remainingMaskTime2 % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((remainingMaskTime2 % (1000 * 60)) / 1000);
+
+  document.getElementById("hoursFrame").innerHTML = hours; //+ "h "
+  //+ minutes + "m " + seconds + "s ";
+  document.getElementById("minutesFrame").innerHTML = minutes;
+  document.getElementById("secondsFrame").innerHTML = seconds;
+
 }
 
+function updateTime(){
+  let newHours =document.getElementById("inputedHours").value;
+  let newMinutes =document.getElementById("inputedMinutes").value;
+  let newSeconds =document.getElementById("inputedSeconds").value;
 
+  let actualHours =document.getElementById("hoursFrame").innerHTML;
+  let actualMinutes =document.getElementById("minutesFrame").innerHTML;
+  let actualSeconds =document.getElementById("secondsFrame").innerHTML;
+
+  document.getElementById("hoursFrame").innerHTML = actualHours-newHours; //+ "h "
+  //+ minutes + "m " + seconds + "s ";
+  document.getElementById("minutesFrame").innerHTML = actualMinutes-newMinutes;
+  document.getElementById("secondsFrame").innerHTML = actualSeconds-newSeconds;
+  
+  document.cookie = ((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000);;
+}
+
+//after start button click
+
+function startMe(){
+ //disable button to prevent double counting overlaping 
+
+document.getElementById("startCount").disabled  = true;
+document.getElementById("submitButton").disabled  = true;
+
+
+//create reverse engineering from hours/minutes/seconds to milliseconds for calculations
+let calculationHours = document.getElementById("hoursFrame").innerHTML
+let calculationMinutes = document.getElementById("minutesFrame").innerHTML
+let calculationSeconds = document.getElementById("secondsFrame").innerHTML
+
+let remainingMaskTime2 = (calculationHours*1000*60*60)+(calculationMinutes*1000*60)+(calculationSeconds*1000);
+
+ var now1 = new Date().getTime();//date represented in milliseconds. When page refreshes this value changes in accordance to time that has passed
+
+// add form to input new hours if needed. The best would be to do counter in hours that user can set up by either pushing plus or minus button or entering number of hours and minutes
+
+ let calculatedMaskTime2 = remainingMaskTime2 + now1 //create number that will be in the future - time from today + remainingMaskTime - from this time code will subtract milliseconds/seconds/hours/days
 
 // Update the count down every 1 second
  var x = setInterval(function() {
@@ -79,18 +160,18 @@ if (isNaN(remainingMaskTime2)){
    var now = new Date().getTime();
     
   // Find the distance between now and the count down date
- var distance = remainingMaskTime2-now//countDownDate - now;
-
+  distance = calculatedMaskTime2-now//countDownDate - now;
   // Time calculations for days, hours, minutes and seconds
-  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 60 * 60)) / (1000 * 60 * 60));
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
     
   // Output the result in an element with id="demo"
-  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
-  + minutes + "m " + seconds + "s ";
-  document.getElementById("invisible").innerHTML = distance;
+
+  document.getElementById("hoursFrame").innerHTML = hours; 
+  document.getElementById("minutesFrame").innerHTML = minutes;
+  document.getElementById("secondsFrame").innerHTML = seconds;
+
   // If the count down is over, write some text 
   if (distance < 0) {
     clearInterval(x);
@@ -108,9 +189,8 @@ function stopCount(){
  }
 function stopAll(){
   document.getElementById("startCount").disabled  = false;
-  let getTime = document.getElementById("invisible").innerHTML;
-
-  document.cookie = getTime;
+  document.getElementById("submitButton").disabled  = false;
+  document.cookie = distance;
 
 }
 
