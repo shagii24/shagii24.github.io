@@ -6,17 +6,16 @@
  body{
    display: grid;
    grid-template-columns: repeat(3,1fr);
-   grid-template-rows: repeat(5,0.5fr);
-   gap: 20px;
+   grid-template-rows: repeat(5,0.1fr);
+   gap: 5vh;
  } 
 
 .showTime {
   grid-row: 1;
   grid-column: 2;
-  height: 5vh;
+  height: 4vh;
 
   font-size: 3rem;
-  margin-top: 0px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -28,10 +27,10 @@
   outline: none;
   grid-column: 2;
   border-radius: 1cm;
-color:white;
-font-family: Verdana, Geneva, Tahoma, sans-serif;
-font-size: 1rem;
-background-color: #407cee;
+  color:white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1rem;
+  background-color: #407cee;
   position: relative;
   align-items: center;
   
@@ -74,18 +73,18 @@ background-color: #407cee;
 <button class="controlButtons" id="stopCount" onclick="stopAll()">Stop</button>
 
 <form id="subtractTime" class="formClass">
-<div class="timeDecision">
-  <input type="radio" name="timeCalculation" id="subTime" value="0" checked="checked">
-  <label for="subTime">Subtract Time</label>
-  <input type="radio" name="timeCalculation" id="addTime" value="1">
-  <label for="addTime">Add Time</label>
-</div>
-<label for="fname">Change time from counter</label>
+  <div class="timeDecision">
+    <input type="radio" name="timeCalculation" id="subTime" value="0" checked="checked">
+    <label for="subTime">Subtract Time</label>
+    <input type="radio" name="timeCalculation" id="addTime" value="1">
+    <label for="addTime">Add Time</label>
+  </div>
+  <label for="fname">Change time from counter</label>
 
-<input type="text" name="fname" id="inputedHours" placeholder="hh">
-<input type="text" name="fname" id="inputedMinutes" placeholder="mm">
-<input type="text" name="fname" id="inputedSeconds" placeholder="ss">
-<button class = "controlButtons submitButton" id="submitButton" onclick="updateTime()">Submit</button>
+  <input type="number" name="fname" id="inputedHours" placeholder="hh">
+  <input type="number" name="fname" id="inputedMinutes" placeholder="mm">
+  <input type="number" name="fname" id="inputedSeconds" placeholder="ss">
+  <button class = "controlButtons submitButton" id="submitButton" onclick="updateTime()">Submit</button>
 </form>
 
 <button onclick="resetMe()" class="controlButtons" id="resetMe">Reset Counter</button>
@@ -136,8 +135,6 @@ function updateTime(){
   let newMinutes =document.getElementById("inputedMinutes").value;
   let newSeconds =document.getElementById("inputedSeconds").value;
 
-
-
   let actualHours =document.getElementById("hoursFrame").innerHTML;
   let actualMinutes =document.getElementById("minutesFrame").innerHTML;
   let actualSeconds =document.getElementById("secondsFrame").innerHTML;
@@ -156,12 +153,9 @@ if (isNaN(actualSecondsInt)){
   actualSecondsInt = 0
 }
 
-
-
 let newHoursInt = parseInt(newHours);
 let newMinutesInt = parseInt(newMinutes);
 let newSecondsInt = parseInt(newSeconds);
-
 
 if (isNaN(newHoursInt)){
   newHoursInt = 0
@@ -181,6 +175,12 @@ for(let i = 0,length = radios.length;i<length;i++){
   }
 }
 if (calculationType === "0"){
+
+if(((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000)<=0){
+  alert("value is higher then remaining hours")
+  return
+}
+
   document.getElementById("hoursFrame").innerHTML = actualHours-newHours; 
   document.getElementById("minutesFrame").innerHTML = actualMinutes-newMinutes;
   document.getElementById("secondsFrame").innerHTML = actualSeconds-newSeconds;
