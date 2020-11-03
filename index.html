@@ -6,7 +6,7 @@
  body{
    display: grid;
    grid-template-columns: repeat(3,1fr);
-   grid-template-rows: repeat(5,0.1fr);
+   grid-template-rows: repeat(6,0.1fr);
    gap: 5vh;
  } 
 
@@ -21,7 +21,18 @@
   align-items: center;
   justify-content: center;
 }
+.timePassed{
+  grid-row: 2;
+  grid-column: 2;
+  height: 4vh;
 
+  font-size: 3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: red;
+}
 .controlButtons{
   cursor: pointer;
   outline: none;
@@ -40,21 +51,24 @@
   height: 1fr;
 }
 #startCount{
-  grid-row: 2;
+  grid-row: 3;
 }
 #stopCount{
-  grid-row: 3;
+  grid-row: 4;
 }
 .formClass{
 
   color:black;
-  grid-row: 4;
+  grid-row: 5;
   grid-column: 2;
   display: flex;
   justify-content: space-around;
   gap:10px;
   flex-direction: column;
   align-items: center;
+}
+#resetMe{
+  grid-row: 6;
 }
 </style>
 </head>
@@ -68,7 +82,14 @@
     <div class="timeFrame" id = "secondsFrame"></div>
     <div class="timeFrame">s</div>
 </div>
-
+<div class="timePassed">
+    <div class="timeFrame" id="passedHoursFrame">0</div>
+    <div class="timeFrame">h</div>
+    <div class="timeFrame" id ="passedMinutesFrame">0</div>
+    <div class="timeFrame">m</div>
+    <div class="timeFrame" id = "passedSecondsFrame">0</div>
+    <div class="timeFrame">s</div>
+</div>
 <button class="controlButtons" id="startCount" onclick="startMe()">Start</button>
 <button class="controlButtons" id="stopCount" onclick="stopAll()">Stop</button>
 
@@ -90,7 +111,7 @@
 <button onclick="resetMe()" class="controlButtons" id="resetMe">Reset Counter</button>
 
 <script>
-
+let Passeddistance = 0;
 let distance // variables outside of any function to collect data that can be used in other functions. 
 
 //downloading data from cookie or data inserted manually by user at load of page
@@ -246,6 +267,27 @@ let remainingMaskTime2 = (calculationHours*1000*60*60)+(calculationMinutes*1000*
     document.getElementById("minutesFrame").innerHTML = 0;
     document.getElementById("secondsFrame").innerHTML = 0;
   }
+
+  //passed time counter
+
+
+    Passeddistance = Passeddistance+1000//countDownDate - now;
+  // Time calculations for days, hours, minutes and seconds
+  var Passedhours = Math.floor((Passeddistance % (1000 * 60 * 60 * 60 * 60)) / (1000 * 60 * 60));
+  var Passedminutes = Math.floor((Passeddistance % (1000 * 60 * 60)) / (1000 * 60));
+  var Passedseconds = Math.floor((Passeddistance % (1000 * 60)) / 1000);
+    
+  // Output the result in an element with id="demo"
+
+  document.getElementById("passedHoursFrame").innerHTML = Passedhours; 
+  document.getElementById("passedMinutesFrame").innerHTML = Passedminutes;
+  document.getElementById("passedSecondsFrame").innerHTML = Passedseconds;
+
+
+
+
+
+
 }, 1000);
 
 let stopButt = document.getElementById("stopCount");
