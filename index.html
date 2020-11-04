@@ -122,12 +122,22 @@ let remainingMaskTime = new Date(720000000).getTime(); //this time is in millise
  
 var now1 = new Date().getTime();//date represented in milliseconds. When page refreshes this value changes in accordance to time that has passed
 
-let remainingMaskTime2 = parseInt(document.cookie);
+let cookieValue = document.cookie.split(';');
 
-console.log(remainingMaskTime2)
+let remainingMaskTime2
+
+for (let i=0;i<cookieValue.length;i++){
+  if(cookieValue[i].includes("millisecValue")){
+    var pat = /[0-9]*$/g
+    var test = cookieValue[i].match(pat);
+    remainingMaskTime2 = parseInt(test[0]);
+   
+  }
+}
+
 // add form to input new hours if needed. The best would be to do counter in hours that user can set up by either pushing plus or minus button or entering number of hours and minutes
 
-if (isNaN(remainingMaskTime2)){
+if (isNaN(remainingMaskTime2) || remainingMaskTime2<0){
   remainingMaskTime2 = remainingMaskTime //create number that will be in the future - time from today + remainingMaskTime - from this time code will subtract milliseconds/seconds/hours/days
 }else{
   remainingMaskTime2 = new Date(remainingMaskTime2).getTime();
@@ -205,8 +215,12 @@ if(((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((ac
   document.getElementById("hoursFrame").innerHTML = actualHours-newHours; 
   document.getElementById("minutesFrame").innerHTML = actualMinutes-newMinutes;
   document.getElementById("secondsFrame").innerHTML = actualSeconds-newSeconds;
+
+  let extendedTime = new Date();
+  extendedTime.setMonth(extendedTime.getMonth()+12);
   
-  document.cookie = ((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000);
+  document.cookie = "millisecValue =" + ((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000);
+  document.cookie = "expires =" + extendedTime;
 
 } else if(calculationType === "1"){
 
@@ -214,7 +228,11 @@ if(((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((ac
   document.getElementById("minutesFrame").innerHTML = actualMinutesInt + newMinutesInt;
   document.getElementById("secondsFrame").innerHTML = actualSecondsInt + newSecondsInt;
 
-  document.cookie = ((actualHoursInt + newHoursInt)*1000*60*60)+((actualMinutesInt + newMinutesInt)*1000*60)+((actualSecondsInt + newSecondsInt)*1000);
+  let extendedTime = new Date();
+  extendedTime.setMonth(extendedTime.getMonth()+12);
+
+  document.cookie = "millisecValue =" + ((actualHoursInt + newHoursInt)*1000*60*60)+((actualMinutesInt + newMinutesInt)*1000*60)+((actualSecondsInt + newSecondsInt)*1000);
+  document.cookie = "expires =" + extendedTime;
 }
 }
 
@@ -302,7 +320,12 @@ function stopAll(){
   document.getElementById("startCount").disabled  = false;
   document.getElementById("submitButton").disabled  = false;
   document.getElementById("resetMe").disabled  = false;
-  document.cookie = distance;
+  let extendedTime = new Date();
+  extendedTime.setMonth(extendedTime.getMonth()+12);
+
+  document.cookie = "millisecValue =" + distance;
+
+  document.cookie = "expires=" + extendedTime;
 
 }
 
