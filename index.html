@@ -219,8 +219,8 @@ if(((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((ac
   let extendedTime = new Date();
   extendedTime.setMonth(extendedTime.getMonth()+12);
   
-  document.cookie = "millisecValue =" + ((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000);
-  document.cookie = "expires =" + extendedTime;
+  document.cookie = "millisecValue =" + ((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000)+ ";";
+  document.cookie = "expires=" + extendedTime+ ";";
 
 } else if(calculationType === "1"){
 
@@ -231,8 +231,8 @@ if(((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((ac
   let extendedTime = new Date();
   extendedTime.setMonth(extendedTime.getMonth()+12);
 
-  document.cookie = "millisecValue =" + ((actualHoursInt + newHoursInt)*1000*60*60)+((actualMinutesInt + newMinutesInt)*1000*60)+((actualSecondsInt + newSecondsInt)*1000);
-  document.cookie = "expires =" + extendedTime;
+  document.cookie = "millisecValue =" + ((actualHoursInt + newHoursInt)*1000*60*60)+((actualMinutesInt + newMinutesInt)*1000*60)+((actualSecondsInt + newSecondsInt)*1000)+ ";";
+  document.cookie = "expires=" + extendedTime + ";";
 }
 }
 
@@ -323,9 +323,9 @@ function stopAll(){
   let extendedTime = new Date();
   extendedTime.setMonth(extendedTime.getMonth()+12);
 
-  document.cookie = "millisecValue =" + distance;
+  document.cookie = "millisecValue =" + distance+ ";";
 
-  document.cookie = "expires=" + extendedTime;
+  document.cookie = "expires=" + extendedTime+ ";";
 
 }
 
