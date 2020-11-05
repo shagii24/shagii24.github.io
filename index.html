@@ -161,6 +161,7 @@ function resetMe(){
   document.getElementById("secondsFrame").innerHTML = 00;
 }
 
+
 function updateTime(){
   let newHours =document.getElementById("inputedHours").value;
   let newMinutes =document.getElementById("inputedMinutes").value;
@@ -171,9 +172,13 @@ function updateTime(){
   let actualSeconds =document.getElementById("secondsFrame").innerHTML;
 
 
+
 let actualHoursInt = parseInt(actualHours);
 let actualMinutesInt = parseInt(actualMinutes);
 let actualSecondsInt = parseInt(actualSeconds);
+
+
+
 if (isNaN(actualHoursInt)){
   actualHoursInt = 0
 }
@@ -207,21 +212,23 @@ for(let i = 0,length = radios.length;i<length;i++){
 }
 if (calculationType === "0"){
 
-if(((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000)<=0){
+if(((actualHoursInt-newHoursInt)*1000*60*60)+((actualMinutesInt-newMinutesInt)*1000*60)+((actualSecondsInt-newSecondsInt)*1000)<=0){
   alert("value is higher then remaining hours")
   return
 }
 
-  document.getElementById("hoursFrame").innerHTML = actualHours-newHours; 
-  document.getElementById("minutesFrame").innerHTML = actualMinutes-newMinutes;
-  document.getElementById("secondsFrame").innerHTML = actualSeconds-newSeconds;
+  document.getElementById("hoursFrame").innerHTML = actualHoursInt-newHoursInt; 
+  document.getElementById("minutesFrame").innerHTML = actualMinutesInt-newMinutesInt;
+  document.getElementById("secondsFrame").innerHTML = actualSecondsInt-newSecondsInt;
 
   let extendedTime = new Date();
   extendedTime.setMonth(extendedTime.getMonth()+12);
   
   let gmtExtendedTime = extendedTime.toUTCString();
 
-  document.cookie = "millisecValue =" + ((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000)+ ";max-age=31536000;expires="+gmtExtendedTime
+let savesubtrValue =  ((actualHoursInt-newHoursInt)*1000*60*60)+((actualMinutesInt-newMinutesInt)*1000*60)+((actualSecondsInt-newSecondsInt)*1000);
+
+  document.cookie = "millisecValue =" +savesubtrValue+ ";max-age=31536000;expires="+gmtExtendedTime
   
 
 } else if(calculationType === "1"){
@@ -235,7 +242,9 @@ if(((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((ac
 
   let gmtExtendedTime = extendedTime.toUTCString();
 
-  document.cookie = "millisecValue =" + ((actualHoursInt + newHoursInt)*1000*60*60)+((actualMinutesInt + newMinutesInt)*1000*60)+((actualSecondsInt + newSecondsInt)*1000)+ ";max-age=31536000;expires="+gmtExtendedTime
+let saveaddValue = ((actualHoursInt + newHoursInt)*1000*60*60)+((actualMinutesInt + newMinutesInt)*1000*60)+((actualSecondsInt + newSecondsInt)*1000)
+
+  document.cookie = "millisecValue =" + saveaddValue+ ";max-age=31536000;expires="+gmtExtendedTime
 }
 }
 
