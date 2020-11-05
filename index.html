@@ -220,7 +220,7 @@ if(((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((ac
   extendedTime.setMonth(extendedTime.getMonth()+12);
   
   document.cookie = "millisecValue =" + ((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((actualSeconds-newSeconds)*1000)+ ";";
-  document.cookie = "max-age=" + extendedTime+ ";";
+  document.cookie = "max-age=31536000;";
 
 } else if(calculationType === "1"){
 
@@ -232,7 +232,7 @@ if(((actualHours-newHours)*1000*60*60)+((actualMinutes-newMinutes)*1000*60)+((ac
   extendedTime.setMonth(extendedTime.getMonth()+12);
 
   document.cookie = "millisecValue =" + ((actualHoursInt + newHoursInt)*1000*60*60)+((actualMinutesInt + newMinutesInt)*1000*60)+((actualSecondsInt + newSecondsInt)*1000)+ ";";
-  document.cookie = "max-age=" + extendedTime + ";";
+  document.cookie = "max-age=31536000;";
 }
 }
 
@@ -325,7 +325,7 @@ function stopAll(){
 
   document.cookie = "millisecValue =" + distance+ ";";
 
-  document.cookie = "max-age=" + extendedTime+ ";";
+  document.cookie = "max-age=31536000;";
 
 }
 
