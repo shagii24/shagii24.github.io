@@ -93,7 +93,7 @@
 <button class="controlButtons" id="startCount" onclick="startMe()">Start</button>
 <button class="controlButtons" id="stopCount" onclick="stopAll()">Stop</button>
 
-<form id="subtractTime" class="formClass">
+<form id="subtractTime" class="formClass" method="GET">
   <div class="timeDecision">
     <input type="radio" name="timeCalculation" id="subTime" value="0" checked="checked">
     <label for="subTime">Subtract Time</label>
@@ -111,32 +111,51 @@
 <button onclick="resetMe()" class="controlButtons" id="resetMe">Reset Counter</button>
 
 <script>
-let Passeddistance = 0;
+let Passeddistance;
+
+let cookiePassedValue = document.cookie.split(';');
+//define variable so it can be update in loop
+
+//searching cookie for string "millisecValue" - when found number is extracted from string with RegExp
+for (let i=0;i<cookiePassedValue.length;i++){
+  if(cookiePassedValue[i].includes("passedValue")){
+    let pat = /[0-9]*$/g
+    let millisecondsPassedCookieInteger = cookiePassedValue[i].match(pat);
+    Passeddistance = parseInt(millisecondsPassedCookieInteger[0]);
+    break;
+  }
+}
+
+if (isNaN(Passeddistance)){
+  Passeddistance=0
+}
+
 let distance // variables outside of any function to collect data that can be used in other functions. 
 
 //downloading data from cookie or data inserted manually by user at load of page
 
 function loadTime(){
 
+//define standard amount of hours - value used when no cookie previously saved
+
 let remainingMaskTime = new Date(720000000).getTime(); //this time is in milliseconds which is 1000 of second
  
-var now1 = new Date().getTime();//date represented in milliseconds. When page refreshes this value changes in accordance to time that has passed
+let now1 = new Date().getTime();//time represented in milliseconds. When page refreshes this value changes in accordance to time that has passed
 
+//download cookie to check if some previous value was already saved
 let cookieValue = document.cookie.split(';');
-
+//define variable so it can be update in loop
 let remainingMaskTime2
-
+//searching cookie for string "millisecValue" - when found number is extracted from string with RegExp
 for (let i=0;i<cookieValue.length;i++){
   if(cookieValue[i].includes("millisecValue")){
-    var pat = /[0-9]*$/g
-    var test = cookieValue[i].match(pat);
-    remainingMaskTime2 = parseInt(test[0]);
-   
+    let pat = /[0-9]*$/g
+    let millisecondsCookieInteger = cookieValue[i].match(pat);
+    remainingMaskTime2 = parseInt(millisecondsCookieInteger[0]);
+    break;
   }
 }
-
-// add form to input new hours if needed. The best would be to do counter in hours that user can set up by either pushing plus or minus button or entering number of hours and minutes
-
+//logic to either assign new time or reset counter to original 200h
 if (isNaN(remainingMaskTime2) || remainingMaskTime2<0){
   remainingMaskTime2 = remainingMaskTime //create number that will be in the future - time from today + remainingMaskTime - from this time code will subtract milliseconds/seconds/hours/days
 }else{
@@ -146,9 +165,8 @@ if (isNaN(remainingMaskTime2) || remainingMaskTime2<0){
   var hours = Math.floor((remainingMaskTime2 % (1000 * 60 * 60 * 60 * 60)) / (1000 * 60 * 60));
   var minutes = Math.floor((remainingMaskTime2 % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((remainingMaskTime2 % (1000 * 60)) / 1000);
-
-  document.getElementById("hoursFrame").innerHTML = hours; //+ "h "
-  //+ minutes + "m " + seconds + "s ";
+//move above variables to HTML
+  document.getElementById("hoursFrame").innerHTML = hours;
   document.getElementById("minutesFrame").innerHTML = minutes;
   document.getElementById("secondsFrame").innerHTML = seconds;
 
@@ -163,22 +181,23 @@ function resetMe(){
 
 
 function updateTime(){
+  //insert into variables new times from user input form
   let newHours =document.getElementById("inputedHours").value;
   let newMinutes =document.getElementById("inputedMinutes").value;
   let newSeconds =document.getElementById("inputedSeconds").value;
 
+//insert into variables time that has been either downloaded from cookie or reset time or time that has already passed
   let actualHours =document.getElementById("hoursFrame").innerHTML;
   let actualMinutes =document.getElementById("minutesFrame").innerHTML;
   let actualSeconds =document.getElementById("secondsFrame").innerHTML;
 
-
-
+//convert values to integers to allow for calculation
 let actualHoursInt = parseInt(actualHours);
 let actualMinutesInt = parseInt(actualMinutes);
 let actualSecondsInt = parseInt(actualSeconds);
 
-
-
+//if any of the values is Nan (not a number) then make 0 as default
+/*
 if (isNaN(actualHoursInt)){
   actualHoursInt = 0
 }
@@ -188,11 +207,11 @@ if (isNaN(actualMinutesInt)){
 if (isNaN(actualSecondsInt)){
   actualSecondsInt = 0
 }
-
+*/
 let newHoursInt = parseInt(newHours);
 let newMinutesInt = parseInt(newMinutes);
 let newSecondsInt = parseInt(newSeconds);
-
+//in case no data is provided in user form 0 is used as default to make calculation work.
 if (isNaN(newHoursInt)){
   newHoursInt = 0
 }
@@ -202,19 +221,20 @@ if (isNaN(newMinutesInt)){
 if (isNaN(newSecondsInt)){
   newSecondsInt = 0
 }
-
+//check which type of calculation should be done (user decide by chosing radio buttons in form )
 let radios = document.getElementsByName("timeCalculation");
 let calculationType;
 for(let i = 0,length = radios.length;i<length;i++){
   if(radios[i].checked){
     calculationType = radios[i].value
+    break;
   }
 }
 if (calculationType === "0"){
 
 if(((actualHoursInt-newHoursInt)*1000*60*60)+((actualMinutesInt-newMinutesInt)*1000*60)+((actualSecondsInt-newSecondsInt)*1000)<=0){
   alert("value is higher then remaining hours")
-  return
+  
 }
 
   document.getElementById("hoursFrame").innerHTML = actualHoursInt-newHoursInt; 
@@ -313,6 +333,7 @@ let remainingMaskTime2 = (calculationHours*1000*60*60)+(calculationMinutes*1000*
   document.getElementById("passedMinutesFrame").innerHTML = Passedminutes;
   document.getElementById("passedSecondsFrame").innerHTML = Passedseconds;
 
+document.cookie = "passedValue=" + Passeddistance;
 
 
 
