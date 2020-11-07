@@ -305,6 +305,7 @@ let PassedcalculationSeconds = document.getElementById("passedSecondsFrame").inn
 
 let Passeddistance = (PassedcalculationHours*1000*60*60)+(PassedcalculationMinutes*1000*60)+(PassedcalculationSeconds*1000);
 
+let tempNow = now1;
 // Update the count down every 1 second
  var x = setInterval(function() {
 
@@ -335,7 +336,8 @@ let Passeddistance = (PassedcalculationHours*1000*60*60)+(PassedcalculationMinut
   //passed time counter
 
 
-    Passeddistance =Passeddistance+ 1000//countDownDate - now;
+    Passeddistance = now - (tempNow);
+
   // Time calculations for days, hours, minutes and seconds
   var Passedhours = Math.floor((Passeddistance % (1000 * 60 * 60 * 60 * 60)) / (1000 * 60 * 60));
   var Passedminutes = Math.floor((Passeddistance % (1000 * 60 * 60)) / (1000 * 60));
