@@ -113,23 +113,6 @@
 <script>
 let Passeddistance;
 
-let cookiePassedValue = document.cookie.split(';');
-//define variable so it can be update in loop
-
-//searching cookie for string "millisecValue" - when found number is extracted from string with RegExp
-for (let i=0;i<cookiePassedValue.length;i++){
-  if(cookiePassedValue[i].includes("passedValue")){
-    let pat = /[0-9]*$/g
-    let millisecondsPassedCookieInteger = cookiePassedValue[i].match(pat);
-    Passeddistance = parseInt(millisecondsPassedCookieInteger[0]);
-    break;
-  }
-}
-
-if (isNaN(Passeddistance)){
-  Passeddistance=0
-}
-
 let distance // variables outside of any function to collect data that can be used in other functions. 
 
 //downloading data from cookie or data inserted manually by user at load of page
@@ -170,6 +153,24 @@ if (isNaN(remainingMaskTime2) || remainingMaskTime2<0){
   document.getElementById("minutesFrame").innerHTML = minutes;
   document.getElementById("secondsFrame").innerHTML = seconds;
 
+
+//define variable so it can be update in loop
+
+//searching cookie for string "millisecValue" - when found number is extracted from string with RegExp
+for (let i=0;i<cookieValue.length;i++){
+  if(cookieValue[i].includes("passedValue")){
+    let pat = /[0-9]*$/g
+    let millisecondsPassedCookieInteger = cookieValue[i].match(pat);
+    Passeddistance = parseInt(millisecondsPassedCookieInteger[0]);
+    break;
+  }
+}
+
+if (isNaN(Passeddistance)){
+  Passeddistance=0
+}
+
+
 }
 
 
@@ -177,6 +178,11 @@ function resetMe(){
   document.getElementById("hoursFrame").innerHTML = 200; 
   document.getElementById("minutesFrame").innerHTML = 00;
   document.getElementById("secondsFrame").innerHTML = 00;
+
+  document.getElementById("passedHoursFrame").innerHTML = 0; 
+  document.getElementById("passedMinutesFrame").innerHTML = 0;
+  document.getElementById("passedSecondsFrame").innerHTML = 0;
+
 }
 
 
@@ -268,6 +274,7 @@ let saveaddValue = ((actualHoursInt + newHoursInt)*1000*60*60)+((actualMinutesIn
 }
 }
 
+
 //after start button click
 
 function startMe(){
@@ -321,7 +328,14 @@ let remainingMaskTime2 = (calculationHours*1000*60*60)+(calculationMinutes*1000*
   //passed time counter
 
 
-    Passeddistance = Passeddistance+1000//countDownDate - now;
+  let PassedcalculationHours = document.getElementById("passedHoursFrame").innerHTML
+let PassedcalculationMinutes = document.getElementById("passedMinutesFrame").innerHTML
+let PassedcalculationSeconds = document.getElementById("passedSecondsFrame").innerHTML
+
+let Passeddistance = (PassedcalculationHours*1000*60*60)+(PassedcalculationMinutes*1000*60)+(PassedcalculationSeconds*1000);
+
+
+    Passeddistance =Passeddistance+ 1000//countDownDate - now;
   // Time calculations for days, hours, minutes and seconds
   var Passedhours = Math.floor((Passeddistance % (1000 * 60 * 60 * 60 * 60)) / (1000 * 60 * 60));
   var Passedminutes = Math.floor((Passeddistance % (1000 * 60 * 60)) / (1000 * 60));
@@ -333,7 +347,7 @@ let remainingMaskTime2 = (calculationHours*1000*60*60)+(calculationMinutes*1000*
   document.getElementById("passedMinutesFrame").innerHTML = Passedminutes;
   document.getElementById("passedSecondsFrame").innerHTML = Passedseconds;
 
-document.cookie = "passedValue=" + Passeddistance;
+
 
 
 
@@ -361,7 +375,7 @@ function stopAll(){
 
 
   document.cookie = "millisecValue =" + distance+ ";max-age=31536000;expires=" +gmtExtendedTime
-
+  document.cookie = "passedValue=" + Passeddistance;
 }
 
 </script>
