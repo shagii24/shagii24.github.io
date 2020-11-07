@@ -298,6 +298,13 @@ let remainingMaskTime2 = (calculationHours*1000*60*60)+(calculationMinutes*1000*
 
  let calculatedMaskTime2 = remainingMaskTime2 + now1 //create number that will be in the future - time from today + remainingMaskTime - from this time code will subtract milliseconds/seconds/hours/days
 
+
+ let PassedcalculationHours = document.getElementById("passedHoursFrame").innerHTML
+let PassedcalculationMinutes = document.getElementById("passedMinutesFrame").innerHTML
+let PassedcalculationSeconds = document.getElementById("passedSecondsFrame").innerHTML
+
+let Passeddistance = (PassedcalculationHours*1000*60*60)+(PassedcalculationMinutes*1000*60)+(PassedcalculationSeconds*1000);
+
 // Update the count down every 1 second
  var x = setInterval(function() {
 
@@ -328,13 +335,6 @@ let remainingMaskTime2 = (calculationHours*1000*60*60)+(calculationMinutes*1000*
   //passed time counter
 
 
-  let PassedcalculationHours = document.getElementById("passedHoursFrame").innerHTML
-let PassedcalculationMinutes = document.getElementById("passedMinutesFrame").innerHTML
-let PassedcalculationSeconds = document.getElementById("passedSecondsFrame").innerHTML
-
-let Passeddistance = (PassedcalculationHours*1000*60*60)+(PassedcalculationMinutes*1000*60)+(PassedcalculationSeconds*1000);
-
-
     Passeddistance =Passeddistance+ 1000//countDownDate - now;
   // Time calculations for days, hours, minutes and seconds
   var Passedhours = Math.floor((Passeddistance % (1000 * 60 * 60 * 60 * 60)) / (1000 * 60 * 60));
@@ -346,12 +346,6 @@ let Passeddistance = (PassedcalculationHours*1000*60*60)+(PassedcalculationMinut
   document.getElementById("passedHoursFrame").innerHTML = Passedhours; 
   document.getElementById("passedMinutesFrame").innerHTML = Passedminutes;
   document.getElementById("passedSecondsFrame").innerHTML = Passedseconds;
-
-
-
-
-
-
 
 }, 1000);
 
